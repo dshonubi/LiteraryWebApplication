@@ -44,8 +44,12 @@ public class Author {
 		return isOfAge;
 	}
 
-	public void setOfAge(boolean isOfAge) {
-		this.isOfAge = isOfAge;
+	public void setOfAge(int age) {
+		if((age>18) || (age<120)) {
+			isOfAge = false;	
+		}else{
+			isOfAge = true;
+		}
 	}
 
 }
