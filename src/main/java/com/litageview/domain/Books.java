@@ -3,8 +3,17 @@ package com.litageview.domain;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Books {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+public class Books {
+	
+	@Id
+	@GeneratedValue
+	private int id;
 	private String title;
 	private String author;
 	private ArrayList<String> genre = new ArrayList<String>();
