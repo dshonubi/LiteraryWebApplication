@@ -10,7 +10,7 @@ import com.litageview.repository.LiteraryWebApplicationRepository;
 public class LiteraryWebApplicationService {
 
 	@Autowired
-	LiteraryWebApplicationRepository lwar;
+	private LiteraryWebApplicationRepository lwar;
 
 	public Books findByTitle(String title) {
 		return lwar.findByTitle(title);

@@ -1,12 +1,56 @@
 package com.litageview.domain;
 
-public class Author {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+
+@Entity
+public class Author {
+	
+	@Id
+	@GeneratedValue
+	@Column(name="Id")
+	private int id;
+	
+	@Column(name="First_Name")
 	private String firstName;
+	
+	@Column(name="Last_Name")
 	private String lastName;
-	private String mobileNumber;
-	private String telephoneNumber;
+	
+	@Column(name="Email")
+	private String email;
+	
+	@Column(name="Mobile_Number")
+	private int mobileNumber;
+	
+	@Column(name="Telephone_Number")
+	private int telephoneNumber;
+	
+	@Column
 	private boolean isOfAge;
+	
+	public Author(String firstName, String lastName, String email, int mobile, int telephone, int age) {
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.mobileNumber = mobile;
+		this.telephoneNumber = telephone;
+		this.setOfAge(age);
+		
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -24,19 +68,27 @@ public class Author {
 		this.lastName = lastName;
 	}
 
-	public String getMobileNumber() {
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getMobileNumber() {
 		return mobileNumber;
 	}
 
-	public void setMobileNumber(String mobileNumber) {
+	public void setMobileNumber(int mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
 
-	public String getTelephoneNumber() {
+	public int getTelephoneNumber() {
 		return telephoneNumber;
 	}
 
-	public void setTelephoneNumber(String telephoneNumber) {
+	public void setTelephoneNumber(int telephoneNumber) {
 		this.telephoneNumber = telephoneNumber;
 	}
 
