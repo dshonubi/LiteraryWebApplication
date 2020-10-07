@@ -4,9 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 public class Books extends Author{
+	
+	@Column(name="BookId")
+	private Integer bookId;
 	
 	@Column(name="Title")
 	private String title;
@@ -19,15 +27,28 @@ public class Books extends Author{
 	
 	@Column(name="Upload_Date")
 	private Date uploadDate;
+	
+	@Lob
+	@Column(name="Book")
+	private MultipartFile book;
 
-
-	public Books(String firstName, String lastName, String email, int mobile, int telephone, int age, String title,
-			ArrayList<String> genre, String description, Date uploadDate) {
+	public Books(String firstName, String lastName, String email, int mobile, int telephone, int age, Integer bookId,
+			String title, ArrayList<String> genre, String description, Date uploadDate, MultipartFile book) {
 		super(firstName, lastName, email, mobile, telephone, age);
+		this.bookId = bookId;
 		this.title = title;
 		this.genre = genre;
 		this.description = description;
 		this.uploadDate = uploadDate;
+		this.book = book;
+	}
+
+	public Integer getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(Integer bookId) {
+		this.bookId = bookId;
 	}
 
 	public String getTitle() {
@@ -62,4 +83,12 @@ public class Books extends Author{
 		this.uploadDate = uploadDate;
 	}
 
+	public MultipartFile getBook() {
+		return book;
+	}
+
+	public void setBook(MultipartFile book) {
+		this.book = book;
+	}
+	
 }

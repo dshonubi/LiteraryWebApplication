@@ -5,9 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.StringReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +35,6 @@ import com.litageview.service.LiteraryWebApplicationService;
 		@Autowired
 		LiteraryWebApplicationService lwas = new LiteraryWebApplicationService();
 		
-		
-
-		
 		//Details needed to connect to the local database for now
 		private static Connection connection = null;
 		private static String host = "localhost";
@@ -42,31 +43,64 @@ import com.litageview.service.LiteraryWebApplicationService;
 		private static String username = "root";
 		private static String password = "Ayodele28?";
 		
-		@RequestMapping(value = "/uploadBook")
+		@RequestMapping(value = "/uploadBook", method = RequestMethod.GET)
 		public ModelAndView uploadBookWebpage(){
 			ModelAndView mav = new ModelAndView();
 			mav.setViewName("authorBookUpload");
+			System.out.println("reahced");
 			return mav;
 		}
 		
-		@RequestMapping(value = "/savingFile", method = RequestMethod.POST)
-		public @ResponseBody String saveTextDocument(@RequestParam MultipartFile file, @RequestParam String bookTitle){
-			System.out.println("reached");
+		
+		// Saving book to database
+		@RequestMapping(value = "/savingBook", method = RequestMethod.POST)
+		public @ResponseBody String deleteBook(@RequestParam MultipartFile file, @RequestParam int bookId,
+														@RequestParam String title,
+														@RequestParam ArrayList<String> genre,
+														@RequestParam String description){
+			
 			if(!file.isEmpty()) {
 				try {
-					bsc.selectSavedBook(author.getFirstName(), author.getLastName(), bookTitle);
-					return	"Document was uploaded succesfully.";
+						Optional<Books> book = lwas.findByBookId(bookId);
+						book.get().setBook(file);
+						book.get().setTitle(title);
+						book.get().setGenre(genre);
+						book.get().setDescription(description);
+						Instant instant = Instant.now();
+						book.get().setUploadDate(Date.from(instant));
 					
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
+						return	"Book was uploaded succesfully.";
+					
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
 				
 			}else {
 				return	"Please upload a valid document.";
 			}
 			
 			//Code doesn't reach this point
-			return "";
+		return "";
+		}
+		
+		
+		//Removing book from database
+		@RequestMapping(value = "/deletingBook", method = RequestMethod.POST)
+		public @ResponseBody String deleteDocument(@RequestParam MultipartFile file, @RequestParam int bookId){
+			System.out.println("reached");
+				
+					Optional<Books> book = lwas.findByBookId(bookId);
+					if(!book.isEmpty()) {
+						
+						lwas.deleteByBookId(bookId);
+					
+						return	"Book was deleted succesfully.";
+					
+					}else {
+						//Will delete later when drop down system is introduced.
+						return	"Please select a valid book.";
+					}
+
 		}
 		
 		
@@ -115,41 +149,5 @@ import com.litageview.service.LiteraryWebApplicationService;
 				return connection;
 			}
 		}
-		
-		//selection of best solution from the collated algorithms
-		public MultipartFile selectSavedBook(String authorFirstName, String authorLastName, String bookTitle) 
-				throws SQLException {
 
-			Connection connection = connection();
-			Statement statement = connection.createStatement();
-			String sql = "";
-			
-			ResultSet rs = statement.executeQuery(sql); 
-			int [] aId = new int[5];
-			int [] algorithms = new int[5];
-			int i = 0;
-			while (rs.next()) {
-				
-				int id = Integer.parseInt(rs.getString("Id"));
-				int solution = Integer.parseInt(rs.getString("FinalSolution"));
-				
-				aId[i] = id;
-				algorithms[i] = solution;
-				
-				i++;
-			}
-			
-			int lowestSol = 0; 
-			for(int j = 0; j<5;j++) {
-				if(j==4) {
-					break;
-				}else if(algorithms[j]<algorithms[j+1]){
-					lowestSol = j;
-				}else {
-					lowestSol = j+1;
-				}
-			}
-			
-			return null;	
-		}
 }

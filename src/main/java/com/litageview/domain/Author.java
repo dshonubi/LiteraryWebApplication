@@ -6,14 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 public class Author {
 	
 	@Id
 	@GeneratedValue
-	@Column(name="Id")
-	private int id;
+	@Column(name="AuthorId")
+	private int authorId;
 	
 	@Column(name="First_Name")
 	private String firstName;
@@ -44,12 +43,12 @@ public class Author {
 		
 	}
 	
-	public int getId() {
-		return id;
+	public int getAuthorId() {
+		return authorId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
 	}
 
 	public String getFirstName() {
